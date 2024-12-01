@@ -10,9 +10,12 @@ import SwiftData
 
 @main
 struct BasicWeatherAppApp: App {
+    @State private var dependencyInjection = DependencyInjection()
+    
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            dependencyInjection.getHomeView()
+                .environment(dependencyInjection)
         }
     }
 }

@@ -4,12 +4,11 @@
 //
 //  Created by FELIPE GADEA LLOPIS on 30/11/24.
 //
-
-import SwiftData
 import SwiftUI
 
 struct HomeView: View {
-    @State private var viewModel: HomeViewModel = HomeViewModel()
+    @Environment(DependencyInjection.self) private var dependencyInjection
+    @State var viewModel: HomeViewModel
     @FocusState private var searchBarFocusState: Bool
 
     var body: some View {
@@ -111,56 +110,7 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
-}
-
-struct UpcomingWeatherDay: View {
-    @Environment(\.colorScheme) var colorScheme
-    let day: Day
-    let dateFormatter = DateFormatter()
-    @State private var expanded = false
+    let dependencyInjection = DependencyInjection()
     
-    init(day: Day) {
-        self.day = day
-        dateFormatter.dateFormat = "EEEE"
-    }
-    
-    var body: some View {
-        HStack(alignment: .top) {
-            Text(dateFormatter.string(from: day.date))
-            Spacer()
-            VStack {
-                HStack {
-                    Image(systemName: "sun.max")
-                    Text("\(day.temperature.celsius)")
-                }
-                if expanded {
-                    HStack {
-                        Image(systemName: "thermometer.sun")
-                        Text("\(day.temperature.celsius)")
-                    }
-                    HStack {
-                        Image(systemName: "thermometer.snowflake")
-                        Text("\(day.temperature.celsius)")
-                    }
-                    HStack {
-                        Image(systemName: "cloud.rain")
-                        Text("\(day.temperature.celsius)")
-                    }
-                }
-            }
-        }
-        .padding()
-        .contentShape(Rectangle())
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(colorScheme == .dark ? .white : .black, lineWidth: 1)
-                .padding(1)
-        )
-        .onTapGesture {
-            withAnimation {
-                expanded = !expanded
-            }
-        }
-    }
+    return dependencyInjection.getHomeView()
 }
